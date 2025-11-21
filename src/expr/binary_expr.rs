@@ -1,5 +1,4 @@
 use core::fmt;
-use std::fmt::Binary;
 
 use crate::expr::Expr;
 
@@ -26,6 +25,7 @@ impl fmt::Display for BinaryOp {
     }
 }
 
+#[derive(Clone)]
 pub struct BinaryExpr {
     left: Box<Expr>,
     right: Box<Expr>,
