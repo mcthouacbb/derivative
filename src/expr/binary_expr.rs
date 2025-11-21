@@ -33,19 +33,19 @@ pub struct BinaryExpr {
 }
 
 impl BinaryExpr {
-    fn new(left: Box<Expr>, right: Box<Expr>, op: BinaryOp) -> Self {
+    pub fn new(left: Box<Expr>, right: Box<Expr>, op: BinaryOp) -> Self {
         Self { left, right, op }
     }
 
-    fn left(&self) -> &Expr {
+    pub fn left(&self) -> &Expr {
         self.left.as_ref()
     }
 
-    fn right(&self) -> &Expr {
+    pub fn right(&self) -> &Expr {
         self.right.as_ref()
     }
 
-    fn op(&self) -> BinaryOp {
+    pub fn op(&self) -> BinaryOp {
         self.op
     }
 }

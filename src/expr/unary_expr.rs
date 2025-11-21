@@ -26,15 +26,15 @@ pub struct UnaryExpr {
 }
 
 impl UnaryExpr {
-    fn new(right: Box<Expr>, op: UnaryOp) -> Self {
+    pub fn new(right: Box<Expr>, op: UnaryOp) -> Self {
         Self { right, op }
     }
 
-    fn right(&self) -> &Expr {
+    pub fn right(&self) -> &Expr {
         self.right.as_ref()
     }
 
-    fn op(&self) -> UnaryOp {
+    pub fn op(&self) -> UnaryOp {
         self.op
     }
 }
