@@ -1,8 +1,8 @@
 use core::fmt;
 
-use crate::expr::Expr;
+use crate::expr::{Expr, operator_info::OperatorInfo};
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum UnaryOp {
     Neg,
 }
@@ -19,7 +19,7 @@ impl fmt::Display for UnaryOp {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct UnaryExpr {
     right: Box<Expr>,
     op: UnaryOp,
@@ -36,5 +36,11 @@ impl UnaryExpr {
 
     pub fn op(&self) -> UnaryOp {
         self.op
+    }
+
+    pub fn get_operator_info(&self) -> OperatorInfo {
+        match self.op {
+            UnaryOp::Neg => OperatorInfo::NEG,
+        }
     }
 }

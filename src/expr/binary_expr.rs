@@ -1,13 +1,14 @@
 use core::fmt;
 
-use crate::expr::Expr;
+use crate::expr::{Expr, operator_info::OperatorInfo};
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum BinaryOp {
     Add,
     Sub,
     Mul,
     Div,
+    Pow,
 }
 
 impl fmt::Display for BinaryOp {
@@ -20,12 +21,13 @@ impl fmt::Display for BinaryOp {
                 Self::Sub => '-',
                 Self::Mul => '*',
                 Self::Div => '/',
+                Self::Pow => '^',
             }
         )
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct BinaryExpr {
     left: Box<Expr>,
     right: Box<Expr>,
@@ -47,5 +49,15 @@ impl BinaryExpr {
 
     pub fn op(&self) -> BinaryOp {
         self.op
+    }
+
+    pub fn get_operator_info(&self) -> OperatorInfo {
+        match self.op {
+            BinaryOp::Add => OperatorInfo::ADD,
+            BinaryOp::Sub => OperatorInfo::SUB,
+            BinaryOp::Mul => OperatorInfo::MUL,
+            BinaryOp::Div => OperatorInfo::DIV,
+            BinaryOp::Pow => OperatorInfo::POW,
+        }
     }
 }
