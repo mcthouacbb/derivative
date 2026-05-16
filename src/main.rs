@@ -51,7 +51,7 @@ fn serialize_expr(expr: &Expr) -> String {
             format!("{}{}", unary_expr.op(), right)
         }
         Expr::Var(var_expr) => var_expr.name().to_string(),
-        Expr::Literal(literal_expr) => literal_expr.value().to_string(),
+        Expr::Const(const_expr) => const_expr.value().to_string(),
     }
 }
 
@@ -78,4 +78,10 @@ fn main() {
 
     println!("{:?}", expr_tree);
     println!("{}", serialize_expr(&expr_tree));
+
+    let str = "x + (3 - 4) / 7 * *(5^z) + y";
+    let tokens = get_tokens(str).expect("Can't lex");
+    let result = parse_expr(tokens);
+
+    println!("{:?}", result);
 }

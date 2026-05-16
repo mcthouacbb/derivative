@@ -5,17 +5,16 @@ pub mod unary_expr;
 pub mod var_expr;
 
 use binary_expr::{BinaryExpr, BinaryOp};
-use literal_expr::LiteralExpr;
 use unary_expr::{UnaryExpr, UnaryOp};
 
-use crate::expr::{operator_info::OperatorInfo, var_expr::VarExpr};
+use crate::expr::{literal_expr::ConstExpr, operator_info::OperatorInfo, var_expr::VarExpr};
 
 #[derive(Debug, Clone)]
 pub enum Expr {
     Binary(BinaryExpr),
     Unary(UnaryExpr),
     Var(VarExpr),
-    Literal(LiteralExpr),
+    Const(ConstExpr),
 }
 
 impl Expr {
@@ -31,15 +30,15 @@ impl Expr {
         Self::Var(VarExpr::new(name))
     }
 
-    pub fn new_literal(value: f64) -> Self {
-        Self::Literal(LiteralExpr::new(value))
+    pub fn new_const(value: f64) -> Self {
+        Self::Const(ConstExpr::new(value))
     }
 
     pub fn get_operator_info(&self) -> OperatorInfo {
         match self {
             Self::Binary(binary_expr) => binary_expr.get_operator_info(),
             Self::Unary(unary_expr) => unary_expr.get_operator_info(),
-            Self::Var(_) | Self::Literal(_) => OperatorInfo::ATOMIC,
+            Self::Var(_) | Self::Const(_) => OperatorInfo::ATOMIC,
         }
     }
 }

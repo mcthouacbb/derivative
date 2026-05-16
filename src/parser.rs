@@ -122,7 +122,7 @@ impl<'a> Parser<'a> {
                 .parse::<f64>()
                 .expect("Valid literal token can't be parsed");
 
-            Ok(Expr::new_literal(value))
+            Ok(Expr::new_const(value))
         } else if self.match_tok(TokenKind::Identifier) {
             let tok = self.peek_last().unwrap();
             let name = tok.str().to_string();
