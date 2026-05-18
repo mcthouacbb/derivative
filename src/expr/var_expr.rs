@@ -1,9 +1,9 @@
 #[derive(Debug, Clone)]
-pub struct VarNode {
+pub struct VarExpr {
     name: String,
 }
 
-impl VarNode {
+impl VarExpr {
     pub fn new(name: String) -> Self {
         Self { name }
     }

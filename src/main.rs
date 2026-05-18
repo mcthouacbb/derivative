@@ -1,9 +1,9 @@
 use crate::{lexer::get_tokens, parser::parse_syntax_tree, serialize::serialize_syntax_tree};
 
+mod expr;
 mod lexer;
 mod parser;
 mod serialize;
-mod syntax;
 
 fn main() {
     /*let str = "x + (3 - 4) / 7 * (5^z) + y";

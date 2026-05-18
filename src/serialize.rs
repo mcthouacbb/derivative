@@ -1,14 +1,14 @@
-use crate::syntax::{
-    SyntaxNode, binary_node::BinaryNode, operator_info::Associativity, unary_node::UnaryNode,
+use crate::expr::{
+    Expr, binary_expr::BinaryExpr, operator_info::Associativity, unary_expr::UnaryExpr,
 };
 
-fn serialize_binary_node(binary_node: &BinaryNode) -> String {
-    let operator_info = binary_node.get_operator_info();
+fn serialize_binary_expr(binary_expr: &BinaryExpr) -> String {
+    let operator_info = binary_expr.get_operator_info();
 
-    let mut left = serialize_syntax_tree(binary_node.left());
-    let mut right = serialize_syntax_tree(binary_node.right());
-    let left_operator_info = binary_node.left().get_operator_info();
-    let right_operator_info = binary_node.right().get_operator_info();
+    let mut left = serialize_syntax_tree(binary_expr.left());
+    let mut right = serialize_syntax_tree(binary_expr.right());
+    let left_operator_info = binary_expr.left().get_operator_info();
+    let right_operator_info = binary_expr.right().get_operator_info();
 
     if left_operator_info.precedence() < operator_info.precedence()
         || (left_operator_info.precedence() == operator_info.precedence()
@@ -32,25 +32,25 @@ fn serialize_binary_node(binary_node: &BinaryNode) -> String {
         right = "(".to_owned() + &right + ")";
     }
 
-    format!("{} {} {}", left, binary_node.op(), right)
+    format!("{} {} {}", left, binary_expr.op(), right)
 }
 
-fn serialize_unary_node(unary_node: &UnaryNode) -> String {
-    let operator_info = unary_node.get_operator_info();
+fn serialize_unary_expr(unary_expr: &UnaryExpr) -> String {
+    let operator_info = unary_expr.get_operator_info();
 
-    let mut right = serialize_syntax_tree(unary_node.right());
-    let right_operator_info = unary_node.right().get_operator_info();
+    let mut right = serialize_syntax_tree(unary_expr.right());
+    let right_operator_info = unary_expr.right().get_operator_info();
     if right_operator_info.precedence() < operator_info.precedence() {
         right = "(".to_owned() + &right + ")";
     }
-    format!("{}{}", unary_node.op(), right)
+    format!("{}{}", unary_expr.op(), right)
 }
 
-pub fn serialize_syntax_tree(syntax_node: &SyntaxNode) -> String {
+pub fn serialize_syntax_tree(syntax_node: &Expr) -> String {
     match syntax_node {
-        SyntaxNode::Binary(binary_node) => serialize_binary_node(binary_node),
-        SyntaxNode::Unary(unary_node) => serialize_unary_node(unary_node),
-        SyntaxNode::Var(var_node) => var_node.name().to_string(),
-        SyntaxNode::Const(const_node) => const_node.value().to_string(),
+        Expr::Binary(binary_expr) => serialize_binary_expr(binary_expr),
+        Expr::Unary(unary_expr) => serialize_unary_expr(unary_expr),
+        Expr::Var(var_node) => var_node.name().to_string(),
+        Expr::Const(const_node) => const_node.value().to_string(),
     }
 }
