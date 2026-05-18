@@ -1,9 +1,9 @@
 #[derive(Debug, Clone)]
-pub struct ConstExpr {
+pub struct ConstNode {
     value: f64,
 }
 
-impl ConstExpr {
+impl ConstNode {
     pub fn new(value: f64) -> Self {
         Self { value }
     }

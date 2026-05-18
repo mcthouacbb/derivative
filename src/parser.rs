@@ -1,9 +1,9 @@
 pub mod parse_err;
 
 use crate::{
-    expr::{Expr, binary_expr::BinaryOp, unary_expr::UnaryOp},
     lexer::token::{Token, TokenKind},
     parser::parse_err::ParseErr,
+    syntax::{SyntaxNode, binary_node::BinaryOp, unary_node::UnaryOp},
 };
 
 struct Parser<'a> {
@@ -53,11 +53,11 @@ impl<'a> Parser<'a> {
         }
     }
 
-    fn parse_expr(&mut self) -> Result<Expr, ParseErr> {
+    fn parse(&mut self) -> Result<SyntaxNode, ParseErr> {
         self.parse_additive()
     }
 
-    fn parse_additive(&mut self) -> Result<Expr, ParseErr> {
+    fn parse_additive(&mut self) -> Result<SyntaxNode, ParseErr> {
         let mut result = self.parse_multiplicative()?;
         loop {
             let op = if self.match_tok(TokenKind::Plus) {
@@ -69,12 +69,12 @@ impl<'a> Parser<'a> {
             };
 
             let right = self.parse_multiplicative()?;
-            result = Expr::new_binary(Box::new(result), Box::new(right), op);
+            result = SyntaxNode::new_binary(Box::new(result), Box::new(right), op);
         }
         Ok(result)
     }
 
-    fn parse_multiplicative(&mut self) -> Result<Expr, ParseErr> {
+    fn parse_multiplicative(&mut self) -> Result<SyntaxNode, ParseErr> {
         let mut result = self.parse_power()?;
         loop {
             let op = if self.match_tok(TokenKind::Star) {
@@ -86,16 +86,16 @@ impl<'a> Parser<'a> {
             };
 
             let right = self.parse_power()?;
-            result = Expr::new_binary(Box::new(result), Box::new(right), op);
+            result = SyntaxNode::new_binary(Box::new(result), Box::new(right), op);
         }
         Ok(result)
     }
 
-    fn parse_power(&mut self) -> Result<Expr, ParseErr> {
+    fn parse_power(&mut self) -> Result<SyntaxNode, ParseErr> {
         let result = self.parse_unary()?;
         if self.match_tok(TokenKind::Caret) {
             let right = self.parse_power()?;
-            Ok(Expr::new_binary(
+            Ok(SyntaxNode::new_binary(
                 Box::new(result),
                 Box::new(right),
                 BinaryOp::Pow,
@@ -105,16 +105,16 @@ impl<'a> Parser<'a> {
         }
     }
 
-    fn parse_unary(&mut self) -> Result<Expr, ParseErr> {
+    fn parse_unary(&mut self) -> Result<SyntaxNode, ParseErr> {
         if self.match_tok(TokenKind::Minus) {
-            let expr = self.parse_unary()?;
-            Ok(Expr::new_unary(Box::new(expr), UnaryOp::Neg))
+            let syntax_node = self.parse_unary()?;
+            Ok(SyntaxNode::new_unary(Box::new(syntax_node), UnaryOp::Neg))
         } else {
             self.parse_primary()
         }
     }
 
-    fn parse_primary(&mut self) -> Result<Expr, ParseErr> {
+    fn parse_primary(&mut self) -> Result<SyntaxNode, ParseErr> {
         if self.match_tok(TokenKind::Literal) {
             let tok = self.peek_last().unwrap();
             let value = tok
@@ -122,24 +122,24 @@ impl<'a> Parser<'a> {
                 .parse::<f64>()
                 .expect("Valid literal token can't be parsed");
 
-            Ok(Expr::new_const(value))
+            Ok(SyntaxNode::new_const(value))
         } else if self.match_tok(TokenKind::Identifier) {
             let tok = self.peek_last().unwrap();
             let name = tok.str().to_string();
 
-            Ok(Expr::new_var(name))
+            Ok(SyntaxNode::new_var(name))
         } else if self.match_tok(TokenKind::OpenParen) {
-            let expr = self.parse_additive()?;
+            let syntax_node = self.parse_additive()?;
             self.expect(TokenKind::CloseParen)?;
 
-            Ok(expr)
+            Ok(syntax_node)
         } else {
             Err(ParseErr::ExpectedPrimary)
         }
     }
 }
 
-pub fn parse_expr<'a>(tokens: Vec<Token<'a>>) -> Result<Expr, ParseErr> {
+pub fn parse_syntax_tree<'a>(tokens: Vec<Token<'a>>) -> Result<SyntaxNode, ParseErr> {
     let mut parser = Parser::new(tokens);
-    parser.parse_expr()
+    parser.parse()
 }

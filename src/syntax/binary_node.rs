@@ -1,6 +1,6 @@
 use core::fmt;
 
-use crate::expr::{Expr, operator_info::OperatorInfo};
+use crate::syntax::{SyntaxNode, operator_info::OperatorInfo};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum BinaryOp {
@@ -28,22 +28,22 @@ impl fmt::Display for BinaryOp {
 }
 
 #[derive(Debug, Clone)]
-pub struct BinaryExpr {
-    left: Box<Expr>,
-    right: Box<Expr>,
+pub struct BinaryNode {
+    left: Box<SyntaxNode>,
+    right: Box<SyntaxNode>,
     op: BinaryOp,
 }
 
-impl BinaryExpr {
-    pub fn new(left: Box<Expr>, right: Box<Expr>, op: BinaryOp) -> Self {
+impl BinaryNode {
+    pub fn new(left: Box<SyntaxNode>, right: Box<SyntaxNode>, op: BinaryOp) -> Self {
         Self { left, right, op }
     }
 
-    pub fn left(&self) -> &Expr {
+    pub fn left(&self) -> &SyntaxNode {
         self.left.as_ref()
     }
 
-    pub fn right(&self) -> &Expr {
+    pub fn right(&self) -> &SyntaxNode {
         self.right.as_ref()
     }
 

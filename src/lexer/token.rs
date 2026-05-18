@@ -1,6 +1,5 @@
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum TokenKind {
-    Eof,
     Identifier,
     Literal,
     Plus,
@@ -19,13 +18,6 @@ pub struct Token<'a> {
 }
 
 impl<'a> Token<'a> {
-    pub fn eof() -> Self {
-        Self {
-            kind: TokenKind::Eof,
-            str: None,
-        }
-    }
-
     pub fn new(kind: TokenKind, str: &'a str) -> Self {
         Self {
             kind,
@@ -38,7 +30,6 @@ impl<'a> Token<'a> {
     }
 
     pub fn str(&self) -> &str {
-        assert!(self.kind != TokenKind::Eof);
         self.str.unwrap()
     }
 }

@@ -44,7 +44,7 @@ impl OperatorInfo {
     };
 
     pub const NEG: Self = Self {
-        precedence: Precedence::AddSub,
+        precedence: Precedence::Neg,
         associativity: None,
     };
 

@@ -1,6 +1,6 @@
 use core::fmt;
 
-use crate::expr::{Expr, operator_info::OperatorInfo};
+use crate::syntax::{SyntaxNode, operator_info::OperatorInfo};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum UnaryOp {
@@ -20,17 +20,17 @@ impl fmt::Display for UnaryOp {
 }
 
 #[derive(Debug, Clone)]
-pub struct UnaryExpr {
-    right: Box<Expr>,
+pub struct UnaryNode {
+    right: Box<SyntaxNode>,
     op: UnaryOp,
 }
 
-impl UnaryExpr {
-    pub fn new(right: Box<Expr>, op: UnaryOp) -> Self {
+impl UnaryNode {
+    pub fn new(right: Box<SyntaxNode>, op: UnaryOp) -> Self {
         Self { right, op }
     }
 
-    pub fn right(&self) -> &Expr {
+    pub fn right(&self) -> &SyntaxNode {
         self.right.as_ref()
     }
 
